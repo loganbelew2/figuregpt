@@ -918,24 +918,49 @@ export default function Home() {
                     .map((message, index) => (
                       <div
                         key={index}
-                        onClick={() => {
-                          navigator.clipboard.writeText(message.content);
-                          const notification = document.createElement("div");
-                          notification.className =
-                            "fixed bottom-4 right-4 bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg shadow-lg animate-in fade-in slide-in-from-bottom-4 z-50";
-                          notification.textContent = "Message copied!";
-                          document.body.appendChild(notification);
-                          setTimeout(() => {
-                            notification.classList.add(
-                              "animate-out",
-                              "fade-out",
-                              "slide-out-to-bottom-4"
-                            );
-                            setTimeout(() => notification.remove(), 150);
-                          }, 1000);
+                        onClick={async () => {
+                          try {
+                            await navigator.clipboard.writeText(message.content);
+                            
+                            // Create toast element
+                            const toast = document.createElement("div");
+                            toast.className = "fixed left-1/2 bottom-20 -translate-x-1/2 bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg shadow-lg animate-in fade-in slide-in-from-bottom-4 z-50";
+                            toast.textContent = "Message copied!";
+                            
+                            // Add toast to body
+                            document.body.appendChild(toast);
+                            
+                            // Remove toast after animation
+                            setTimeout(() => {
+                              toast.classList.add("animate-out", "fade-out", "slide-out-to-bottom-4");
+                              setTimeout(() => toast.remove(), 150);
+                            }, 1500);
+                          } catch (err) {
+                            // Fallback for browsers that don't support clipboard API
+                            const textArea = document.createElement("textarea");
+                            textArea.value = message.content;
+                            textArea.style.position = "fixed";
+                            textArea.style.left = "-999999px";
+                            document.body.appendChild(textArea);
+                            textArea.select();
+                            try {
+                              document.execCommand("copy");
+                              const toast = document.createElement("div");
+                              toast.className = "fixed left-1/2 bottom-20 -translate-x-1/2 bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg shadow-lg animate-in fade-in slide-in-from-bottom-4 z-50";
+                              toast.textContent = "Message copied!";
+                              document.body.appendChild(toast);
+                              setTimeout(() => {
+                                toast.classList.add("animate-out", "fade-out", "slide-out-to-bottom-4");
+                                setTimeout(() => toast.remove(), 150);
+                              }, 1500);
+                            } catch (err) {
+                              console.error("Failed to copy text:", err);
+                            }
+                            document.body.removeChild(textArea);
+                          }
                         }}
                         className={cn(
-                          "group flex gap-2 rounded-lg p-2 md:gap-4 md:p-4 transition-all duration-300 animate-in slide-in-from-bottom-2 cursor-pointer w-full break-words overflow-x-hidden",
+                          "group flex gap-2 rounded-lg p-2 md:gap-4 md:p-4 transition-all duration-300 animate-in slide-in-from-bottom-2 cursor-pointer w-full overflow-hidden",
                           message.role === "assistant"
                             ? "bg-accent/50 hover:scale-[1.01] hover:bg-accent/60"
                             : "bg-background hover:bg-accent/5"
@@ -950,13 +975,13 @@ export default function Home() {
                             <MessageSquare size={16} />
                           </div>
                         )}
-                        <div className="flex-1 min-w-0 break-words">
+                        <div className="flex-1 min-w-0 max-w-full overflow-hidden">
                           <div className="mb-1 font-medium truncate">
                             {message.role === "assistant"
                               ? selectedPersonality.name
                               : "You"}
                           </div>
-                          <div className="whitespace-pre-wrap text-muted-foreground break-words overflow-wrap-anywhere overflow-x-hidden">
+                          <div className="whitespace-pre-wrap text-muted-foreground break-words hyphens-auto overflow-hidden text-sm md:text-base">
                             {message.content}
                           </div>
                         </div>

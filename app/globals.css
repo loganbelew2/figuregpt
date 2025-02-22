@@ -198,10 +198,16 @@
 @media (max-width: 768px) {
   body {
     cursor: auto !important;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
   }
+  
   a, button, input, [role="button"] {
     cursor: auto !important;
   }
+  
   .hover-tilt:hover {
     animation: none;
   }
@@ -214,6 +220,22 @@
   /* Ensure content is visible when sidebar is open */
   .sidebar-open {
     overflow: hidden;
+  }
+
+  /* Improve text wrapping on mobile */
+  .whitespace-pre-wrap {
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  /* Force word breaks on long strings */
+  .break-words {
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
   }
 }
 
