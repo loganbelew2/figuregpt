@@ -991,8 +991,10 @@ export default function Home() {
                               ? selectedPersonality.name
                               : "You"}
                           </div>
-                          <div className="whitespace-pre-wrap text-muted-foreground break-words overflow-wrap-anywhere overflow-x-hidden text-sm md:text-base">
-                            {message.content}
+                          <div className="whitespace-pre-wrap text-muted-foreground break-words overflow-wrap-anywhere overflow-x-hidden text-sm md:text-base max-w-full overflow-hidden">
+                            <span className="break-words whitespace-pre-wrap overflow-wrap-anywhere">
+                              {message.content}
+                            </span>
                           </div>
                         </div>
                       </div>

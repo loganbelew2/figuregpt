@@ -205,6 +205,7 @@
     hyphens: auto;
     overflow-wrap: break-word;
     word-wrap: break-word;
+    -webkit-text-size-adjust: 100%;
   }
   
   a, button, input, [role="button"], textarea {
@@ -236,6 +237,7 @@
     hyphens: auto !important;
     max-width: 100% !important;
     overflow-x: hidden !important;
+    text-overflow: ellipsis !important;
   }
 
   /* Force word breaks on long strings */
@@ -247,6 +249,7 @@
     hyphens: auto !important;
     max-width: 100% !important;
     overflow-x: hidden !important;
+    text-overflow: ellipsis !important;
   }
 
   /* Ensure all text containers handle overflow properly */
@@ -256,6 +259,26 @@
     word-break: break-word !important;
     max-width: 100% !important;
     overflow-x: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Additional mobile text handling */
+  .overflow-wrap-anywhere {
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+    -webkit-line-break: anywhere !important;
+    line-break: anywhere !important;
+    hyphens: auto !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Ensure text containers don't overflow their bounds */
+  div, p, span {
+    max-width: 100% !important;
+    overflow-wrap: break-word !important;
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    -webkit-text-size-adjust: 100%;
   }
 }
 
