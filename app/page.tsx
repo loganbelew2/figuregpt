@@ -891,7 +891,7 @@ export default function Home() {
                           }, 1000);
                         }}
                   className={cn(
-                          "group flex gap-4 rounded-lg p-4 transition-all duration-300 animate-in slide-in-from-bottom-2 cursor-pointer w-full break-words",
+                          "group flex gap-4 rounded-lg p-4 transition-all duration-300 animate-in slide-in-from-bottom-2 cursor-pointer w-full break-words overflow-hidden",
                     message.role === "assistant"
                             ? "bg-accent/50 hover:scale-[1.01] hover:bg-accent/60"
                             : "bg-background hover:bg-accent/5"
@@ -906,11 +906,11 @@ export default function Home() {
                       <MessageSquare size={16} />
                     </div>
                   )}
-                  <div className="flex-1 min-w-0">
-                    <div className="mb-1 font-medium">
+                  <div className="flex-1 min-w-0 overflow-hidden">
+                    <div className="mb-1 font-medium truncate">
                       {message.role === "assistant" ? selectedPersonality.name : "You"}
                     </div>
-                    <div className="whitespace-pre-wrap text-muted-foreground break-words overflow-hidden">
+                    <div className="whitespace-pre-wrap text-muted-foreground break-words overflow-hidden overflow-wrap-anywhere">
                       {message.content}
                     </div>
                   </div>
