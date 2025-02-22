@@ -589,6 +589,9 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [trails, setTrails] = useState<{ x: number; y: number; id: number }[]>([]);
+  const trailCount = 24; // Increased from 12 to 24 dots
+  const trailLifetime = 30; // Decreased from 50 to 30ms for smoother movement
   const [isEmojiAnimating, setIsEmojiAnimating] = useState(false);
   const [newChatDialogOpen, setNewChatDialogOpen] = useState(false);
   const [tempPersonality, setTempPersonality] = useState<Personality>(
@@ -620,7 +623,20 @@ export default function Home() {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      const newPosition = { x: e.clientX, y: e.clientY };
+      setMousePosition(newPosition);
+      
+      // Update trails
+      setTrails(prevTrails => {
+        const now = Date.now();
+        const newTrails = [...prevTrails];
+        
+        // Add new trail point
+        newTrails.push({ ...newPosition, id: now });
+        
+        // Keep only the most recent points
+        return newTrails.slice(-trailCount);
+      });
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -724,24 +740,19 @@ export default function Home() {
         className="pointer-events-none fixed inset-0 z-[100] transition-opacity duration-300 lg:block hidden"
         aria-hidden="true"
       >
-        {/* Main cursor */}
-        <div
-          className="fixed h-8 w-8 rounded-full bg-gradient-to-r from-primary/20 to-primary/10 blur-md transition-transform duration-200"
-          style={{
-            left: `${mousePosition.x}px`,
-            top: `${mousePosition.y}px`,
-            transform: "translate(-50%, -50%)",
-          }}
-        />
-        {/* Cursor dot */}
-        <div
-          className="fixed h-2 w-2 rounded-full bg-primary transition-transform duration-200"
-          style={{
-            left: `${mousePosition.x}px`,
-            top: `${mousePosition.y}px`,
-            transform: "translate(-50%, -50%)",
-          }}
-        />
+        {/* Cursor trails */}
+        {trails.map((trail, index) => (
+          <div
+            key={trail.id}
+            className="cursor-trail"
+            style={{
+              left: `${trail.x}px`,
+              top: `${trail.y}px`,
+              opacity: (index + 1) / trails.length,
+              transform: `scale(${(index + 1) / trails.length})`,
+            }}
+          />
+        ))}
       </div>
 
       <div className="flex h-screen bg-background transition-colors duration-300">

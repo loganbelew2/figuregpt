@@ -79,13 +79,14 @@
 @layer base {
   * {
     @apply border-border;
+    cursor: none !important;
   }
   body {
     @apply bg-background text-foreground;
-    cursor: none;
+    cursor: none !important;
   }
-  a, button, input, [role="button"] {
-    cursor: none;
+  a, button, input, [role="button"], textarea {
+    cursor: none !important;
   }
 }
 
@@ -206,7 +207,7 @@
     word-wrap: break-word;
   }
   
-  a, button, input, [role="button"] {
+  a, button, input, [role="button"], textarea {
     cursor: auto !important;
   }
   
@@ -215,7 +216,7 @@
   }
   
   /* Disable custom cursor on mobile */
-  .pointer-events-none {
+  .pointer-events-none, .cursor-trail {
     display: none !important;
   }
   
@@ -321,6 +322,7 @@
     hsl(var(--cursor-glow-2) / 0.1)
   );
   box-shadow: 0 0 20px hsl(var(--cursor-glow-1) / 0.1);
+  transition: transform 0.1s ease;
 }
 
 .pointer-events-none .fixed.h-2.w-2 {
@@ -330,4 +332,24 @@
     hsl(var(--cursor-glow-2))
   );
   box-shadow: 0 0 10px hsl(var(--cursor-glow-1) / 0.5);
+  transition: transform 0.1s ease;
+}
+
+/* Cursor trail effect */
+.cursor-trail {
+  pointer-events: none;
+  position: fixed;
+  width: 15px;
+  height: 15px;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--cursor-glow-1) / 0.3),
+    hsl(var(--cursor-glow-2) / 0.2)
+  );
+  box-shadow: 
+    0 0 10px hsl(var(--cursor-glow-1) / 0.3),
+    0 0 20px hsl(var(--cursor-glow-1) / 0.2),
+    0 0 30px hsl(var(--cursor-glow-2) / 0.1);
+  border-radius: 50%;
+  transition: transform 0.15s ease;
 }
