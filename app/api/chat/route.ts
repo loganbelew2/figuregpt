@@ -24,8 +24,9 @@ export async function POST(request: Request) {
     const headers = {
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
+      'Cache-Control': 'no-cache, no-transform',
       'Connection': 'keep-alive',
+      'X-Accel-Buffering': 'no',
     };
 
     const json = await request.json();
@@ -58,6 +59,7 @@ export async function POST(request: Request) {
         messages,
         stream: true,
         temperature: 0.7,
+        max_tokens: 1000,
       }),
     });
 
@@ -84,6 +86,9 @@ export async function POST(request: Request) {
       console.log('Client disconnected, aborting stream');
     });
 
+    let buffer = '';
+    const encoder = new TextEncoder();
+
     // Create readable stream from the response
     const stream = new ReadableStream({
       async start(controller) {
@@ -94,11 +99,56 @@ export async function POST(request: Request) {
             const { done, value } = await reader.read();
             
             if (done) {
+              // Flush any remaining buffered content
+              if (buffer) {
+                controller.enqueue(encoder.encode(`data: ${buffer}\n\n`));
+              }
+              controller.enqueue(encoder.encode('data: [DONE]\n\n'));
               controller.close();
               break;
             }
+
+            // Decode the chunk and process it
+            const chunk = new TextDecoder().decode(value);
+            const lines = chunk.split('\n');
+
+            for (const line of lines) {
+              if (line.trim() === '') continue;
+              if (!line.startsWith('data: ')) continue;
+
+              const data = line.slice(6);
+              if (data === '[DONE]') continue;
+
+              try {
+                const parsed = JSON.parse(data);
+                const content = parsed.choices?.[0]?.delta?.content;
+                
+                if (content) {
+                  buffer += content;
+                  // Only send complete sentences or phrases
+                  if (content.match(/[.!?](\s|$)/) || buffer.length > 100) {
+                    controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+                      choices: [{
+                        delta: { content: buffer }
+                      }]
+                    })}\n\n`));
+                    buffer = '';
+                  }
+                }
+              } catch (e) {
+                console.error('Error parsing chunk:', e);
+              }
+            }
             
-            controller.enqueue(value);
+            // If we have buffered content but haven't received a new chunk in a while
+            if (buffer) {
+              controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+                choices: [{
+                  delta: { content: buffer }
+                }]
+              })}\n\n`));
+              buffer = '';
+            }
           }
         } catch (error: any) {
           if (error?.name === 'AbortError') {

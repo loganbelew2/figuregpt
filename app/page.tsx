@@ -757,25 +757,25 @@ export default function Home() {
 
       <div className="flex h-screen bg-background transition-colors duration-300">
         {/* Sidebar */}
-        <div
-          className={cn(
+      <div
+        className={cn(
             "fixed inset-y-0 left-0 z-40 flex w-[80%] flex-col border-r bg-card/50 backdrop-blur-sm transition-all duration-300 ease-in-out md:w-72 md:relative",
-            !sidebarOpen && "-translate-x-full md:translate-x-0"
-          )}
-        >
-          <div className="flex h-full flex-col gap-2 p-4">
-            <button
+          !sidebarOpen && "-translate-x-full md:translate-x-0"
+        )}
+      >
+        <div className="flex h-full flex-col gap-2 p-4">
+          <button
               className="group flex items-center gap-2 rounded-lg bg-primary/5 p-4 text-primary transition-all duration-200 hover:bg-primary/10 hover:scale-[1.02] active:scale-[0.98]"
               onClick={handleNewChatClick}
-            >
+          >
               <MessageSquare
                 size={18}
                 className="transition-transform group-hover:rotate-12"
               />
-              <span className="font-medium">New Chat</span>
-            </button>
+            <span className="font-medium">New Chat</span>
+          </button>
 
-            <div className="mt-8">
+          <div className="mt-8">
               <h2 className="mb-4 px-2 text-sm font-medium text-muted-foreground">
                 Chat History
               </h2>
@@ -783,25 +783,25 @@ export default function Home() {
                 {histories.length === 0 ? (
                   <div className="px-2 py-3 text-sm text-muted-foreground">
                     No chat history. Start a conversation!
-                  </div>
+            </div>
                 ) : (
                   histories.map((history) => (
                     <div
                       key={history.id}
                       onClick={() => handleHistoryClick(history)}
-                      className={cn(
+                  className={cn(
                         "group relative w-full rounded-md px-3 py-2 text-left transition-all duration-200",
                         selectedPersonality.id === history.personality.id &&
                           selectedMood.id === history.mood.id
                           ? "bg-primary/10 text-primary scale-[1.02]"
                           : "hover:bg-accent hover:scale-[1.01]"
-                      )}
-                    >
-                      <div className="flex items-center gap-2">
+                  )}
+                >
+                  <div className="flex items-center gap-2">
                         <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-md bg-primary/10 text-primary transition-transform group-hover:rotate-12">
                           {history.mood.emoji}
                         </div>
-                        <div className="flex-1 truncate">
+                    <div className="flex-1 truncate">
                           <div className="font-medium flex items-center gap-2">
                             <span>{history.personality.name}</span>
                             <span className="text-xs text-muted-foreground">
@@ -825,7 +825,7 @@ export default function Home() {
                     </div>
                   ))
                 )}
-              </div>
+                  </div>
             </div>
           </div>
         </div>
@@ -838,55 +838,55 @@ export default function Home() {
           />
         )}
 
-        {/* Main Content */}
+      {/* Main Content */}
         <div className="flex flex-1 flex-col h-full">
           {/* Header - Make sticky */}
           <header className="flex h-14 items-center justify-between border-b px-4 bg-background/50 backdrop-blur-sm sticky top-0 z-30">
             <div className="flex items-center gap-2">
-              <button
-                onClick={() => setSidebarOpen(!sidebarOpen)}
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
                 className="rounded-lg p-2 transition-colors hover:bg-accent md:hidden"
-              >
-                <Menu size={20} />
-              </button>
+          >
+            <Menu size={20} />
+          </button>
               <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setSearchOpen(true)}
+            <button
+              onClick={() => setSearchOpen(true)}
                   className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-all duration-200 hover:bg-accent hover:text-foreground hover:scale-[1.02] md:min-w-[180px]"
-                >
-                  <User size={16} className="shrink-0" />
+            >
+              <User size={16} className="shrink-0" />
                   <span className="hidden md:inline font-medium">
                     {selectedPersonality.name}
                   </span>
                   <Search size={14} className="shrink-0 ml-auto" />
-                </button>
-                <DropdownMenu>
+            </button>
+            <DropdownMenu>
                   <DropdownMenuTrigger className="flex items-center gap-1 rounded-lg px-2 py-1.5 text-sm transition-all duration-200 hover:bg-accent group">
                     <span className="group-hover:animate-bounce">
                       {selectedMood.emoji}
                     </span>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
-                    {moods.map((mood) => (
-                      <DropdownMenuItem
-                        key={mood.id}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                {moods.map((mood) => (
+                  <DropdownMenuItem
+                    key={mood.id}
                         onClick={() => handleMoodChange(mood)}
                         className="group flex items-center gap-2 cursor-pointer transition-colors"
-                      >
+                  >
                         <span className="text-base group-hover:animate-bounce">
                           {mood.emoji}
                         </span>
-                        <span>{mood.name}</span>
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+                    <span>{mood.name}</span>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
             </div>
             <div className="flex items-center gap-2">
               <ThemeToggle />
             </div>
-          </header>
+        </header>
 
           {/* Chat Messages - Make scrollable */}
           <div
@@ -920,14 +920,14 @@ export default function Home() {
                     Start a conversation in {selectedMood.name.toLowerCase()}{" "}
                     mood
                   </p>
-                </div>
-              ) : (
+              </div>
+            ) : (
                 <>
                   {messages
                     .filter((message) => message.role !== "system")
                     .map((message, index) => (
-                      <div
-                        key={index}
+                <div
+                  key={index}
                         onClick={async () => {
                           try {
                             await navigator.clipboard.writeText(message.content);
@@ -969,22 +969,22 @@ export default function Home() {
                             document.body.removeChild(textArea);
                           }
                         }}
-                        className={cn(
+                  className={cn(
                           "group flex gap-2 rounded-lg p-2 md:gap-4 md:p-4 transition-all duration-300 animate-in slide-in-from-bottom-2 cursor-pointer w-full overflow-hidden break-words",
-                          message.role === "assistant"
+                    message.role === "assistant"
                             ? "bg-accent/50 hover:scale-[1.01] hover:bg-accent/60"
                             : "bg-background hover:bg-accent/5"
-                        )}
-                      >
-                        {message.role === "assistant" ? (
+                  )}
+                >
+                  {message.role === "assistant" ? (
                           <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-md bg-primary/10 text-primary transition-transform group-hover:rotate-12 group-hover:scale-110">
-                            {selectedMood.emoji}
-                          </div>
-                        ) : (
+                      {selectedMood.emoji}
+                    </div>
+                  ) : (
                           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-muted transition-transform group-hover:rotate-12 group-hover:scale-110">
-                            <MessageSquare size={16} />
-                          </div>
-                        )}
+                      <MessageSquare size={16} />
+                    </div>
+                  )}
                         <div className="flex-1 min-w-0 max-w-full break-words overflow-hidden">
                           <div className="mb-1 font-medium truncate">
                             {message.role === "assistant"
@@ -1004,8 +1004,8 @@ export default function Home() {
                       <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-md bg-primary/10 text-primary">
                         {selectedMood.emoji}
                       </div>
-                      <div className="flex-1">
-                        <div className="mb-1 font-medium">
+                  <div className="flex-1">
+                    <div className="mb-1 font-medium">
                           {selectedPersonality.name}
                         </div>
                         <div className="h-4 w-24 rounded-full bg-gradient-to-r from-blue-400 via-blue-500 to-blue-400 animate-gradient-x"></div>
@@ -1015,7 +1015,7 @@ export default function Home() {
                   <div ref={messagesEndRef} />
                 </>
               )}
-            </div>
+                    </div>
             {!shouldAutoScroll &&
               messages.filter((message) => message.role !== "system").length >
                 0 && (
@@ -1043,15 +1043,15 @@ export default function Home() {
                     </svg>
                   </div>
                 </button>
-              )}
-          </div>
+            )}
+        </div>
 
           {/* Input Form - Make sticky */}
           <div className="border-t bg-background/50 backdrop-blur-sm p-4 sticky bottom-0 z-30">
-            <form onSubmit={handleSubmit} className="mx-auto max-w-3xl">
+          <form onSubmit={handleSubmit} className="mx-auto max-w-3xl">
               <div className="relative flex items-start">
                 <textarea
-                  value={input}
+                value={input}
                   onChange={(e) => {
                     setInput(e.target.value);
                     // Auto-adjust height
@@ -1072,47 +1072,47 @@ export default function Home() {
                   placeholder={`Message ${selectedPersonality.name}...`}
                   rows={1}
                   className="flex-1 rounded-lg border bg-background px-4 py-3 pr-12 text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:scale-[1.01] hover:border-primary/50 resize-none min-h-[44px] max-h-[200px] overflow-y-auto"
-                />
-                <button
-                  type="submit"
+              />
+              <button
+                type="submit"
                   className="absolute right-3 top-2.5 rounded-md p-1 text-muted-foreground transition-all duration-200 hover:text-foreground hover:scale-110 disabled:opacity-50 disabled:hover:scale-100 group"
-                  disabled={!input.trim()}
-                >
+                disabled={!input.trim()}
+              >
                   <Send
                     size={18}
                     className="transition-transform group-hover:translate-x-1"
                   />
-                </button>
-              </div>
-            </form>
-          </div>
+              </button>
+            </div>
+          </form>
         </div>
+      </div>
 
         {/* Search Dialog */}
-        <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
-          <CommandInput placeholder="Search personalities..." />
-          <CommandList>
+      <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
+        <CommandInput placeholder="Search personalities..." />
+        <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup heading="All Personalities">
               {personalities
                 .slice()
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((personality) => (
-                  <CommandItem
-                    key={personality.id}
-                    onSelect={() => {
-                      setSelectedPersonality(personality);
-                      setSearchOpen(false);
-                    }}
+              <CommandItem
+                key={personality.id}
+                onSelect={() => {
+                  setSelectedPersonality(personality);
+                  setSearchOpen(false);
+                }}
                     className="group"
                   >
                     <User className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12" />
                     <span>{personality.name}</span>
-                  </CommandItem>
-                ))}
-            </CommandGroup>
-          </CommandList>
-        </CommandDialog>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
+      </CommandDialog>
 
         {/* New Chat Dialog */}
         <Dialog open={newChatDialogOpen} onOpenChange={setNewChatDialogOpen}>
@@ -1251,7 +1251,7 @@ export default function Home() {
             </div>
           </DialogContent>
         </Dialog>
-      </div>
+    </div>
     </>
   );
 }
