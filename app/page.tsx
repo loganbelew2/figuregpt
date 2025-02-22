@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Menu, MessageSquare, Send, Settings, User, Search, X, Trash2 } from "lucide-react";
+import { Menu, MessageSquare, Send, User, Search, X, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
@@ -47,19 +47,19 @@ const personalities = [
     id: "gates", 
     name: "Bill Gates", 
     description: "Microsoft founder & philanthropist",
-    catchPhrase: "Tech can solve the world’s problems!" 
+    catchPhrase: "Tech can solve the world's problems!" 
   },
   { 
     id: "marley", 
     name: "Bob Marley", 
     description: "Reggae icon",
-    catchPhrase: "One love, one heart, let’s get together!" 
+    catchPhrase: "One love, one heart, let's get together!" 
   },
   { 
     id: "merkel", 
     name: "Angela Merkel", 
     description: "Former German Chancellor",
-    catchPhrase: "Stability is strength, y’all!" 
+    catchPhrase: "Stability is strength, y'all!" 
   },
   { 
     id: "picasso", 
@@ -71,49 +71,49 @@ const personalities = [
     id: "jordan", 
     name: "Michael Jordan", 
     description: "Basketball GOAT",
-    catchPhrase: "I can fly, and I’ll prove it!" 
+    catchPhrase: "I can fly, and I'll prove it!" 
   },
   { 
     id: "winehouse", 
     name: "Amy Winehouse", 
     description: "Soul singer",
-    catchPhrase: "Love’s a losing game, but I’m playin’!" 
+    catchPhrase: "Love's a losing game, but I'm playin'!" 
   },
   { 
     id: "newton", 
     name: "Isaac Newton", 
     description: "Physicist & mathematician",
-    catchPhrase: "Gravity’s my jam, apples included!" 
+    catchPhrase: "Gravity's my jam, apples included!" 
   },
   { 
     id: "dylan", 
     name: "Bob Dylan", 
     description: "Folk music legend",
-    catchPhrase: "The times, they are a-changin’!" 
+    catchPhrase: "The times, they are a-changin'!" 
   },
   { 
     id: "monroe", 
     name: "Marilyn Monroe", 
     description: "Hollywood icon",
-    catchPhrase: "Diamonds are a girl’s best friend!" 
+    catchPhrase: "Diamonds are a girl's best friend!" 
   },
   { 
     id: "darwin", 
     name: "Charles Darwin", 
     description: "Evolution theorist",
-    catchPhrase: "Survival’s for the fittest, baby!" 
+    catchPhrase: "Survival's for the fittest, baby!" 
   },
   { 
     id: "prince", 
     name: "Prince", 
     description: "Music innovator",
-    catchPhrase: "Party like it’s 1999, every day!" 
+    catchPhrase: "Party like it's 1999, every day!" 
   },
   { 
     id: "rosa", 
     name: "Rosa Parks", 
     description: "Civil rights pioneer",
-    catchPhrase: "I’m sittin’ for justice, y’all!" 
+    catchPhrase: "I'm sittin' for justice, y'all!" 
   },
   { 
     id: "messi", 
@@ -124,14 +124,14 @@ const personalities = [
   { 
     id: "diana", 
     name: "Princess Diana", 
-    description: "People’s Princess",
+    description: "People's Princess",
     catchPhrase: "Love is the crown I wear!" 
   },
   { 
     id: "edison", 
     name: "Thomas Edison", 
     description: "Inventor of the light bulb",
-    catchPhrase: "I’ll light up the world!" 
+    catchPhrase: "I'll light up the world!" 
   },
   { 
     id: "ladygaga", 
@@ -161,13 +161,13 @@ const personalities = [
     id: "rowling", 
     name: "J.K. Rowling", 
     description: "Harry Potter author",
-    catchPhrase: "Magic’s real if you believe!" 
+    catchPhrase: "Magic's real if you believe!" 
   },
   { 
     id: "pavarotti", 
     name: "Luciano Pavarotti", 
     description: "Opera maestro",
-    catchPhrase: "Sing ‘til the world hears ya!" 
+    catchPhrase: "Sing 'til the world hears ya!" 
   },
   { 
     id: "earhart", 
@@ -209,7 +209,7 @@ const personalities = [
     id: "banksy", 
     name: "Banksy", 
     description: "Street art enigma",
-    catchPhrase: "Art’s my silent rebellion!" 
+    catchPhrase: "Art's my silent rebellion!" 
   },
   { 
     id: "hendrix", 
@@ -221,31 +221,31 @@ const personalities = [
     id: "austen", 
     name: "Jane Austen", 
     description: "Novelist of romance",
-    catchPhrase: "Love’s a story worth tellin’!" 
+    catchPhrase: "Love's a story worth tellin'!" 
   },
   { 
     id: "pele", 
     name: "Pelé", 
     description: "Soccer legend",
-    catchPhrase: "The beautiful game’s my life!" 
+    catchPhrase: "The beautiful game's my life!" 
   },
   { 
     id: "warhol", 
     name: "Andy Warhol", 
     description: "Pop art pioneer",
-    catchPhrase: "Fame’s my canvas, y’all!" 
+    catchPhrase: "Fame's my canvas, y'all!" 
   },
   { 
     id: "motherteresa", 
     name: "Mother Teresa", 
     description: "Saint of the poor",
-    catchPhrase: "Love ‘til it hurts!" 
+    catchPhrase: "Love 'til it hurts!" 
   },
   { 
     id: "cruz", 
     name: "Penélope Cruz", 
     description: "Spanish actress",
-    catchPhrase: "Passion’s my script!" 
+    catchPhrase: "Passion's my script!" 
   },
   { 
     id: "freud", 
@@ -257,7 +257,7 @@ const personalities = [
     id: "bowie", 
     name: "David Bowie", 
     description: "Rock chameleon",
-    catchPhrase: "Let’s dance through the stars!" 
+    catchPhrase: "Let's dance through the stars!" 
   },
   { 
     id: "thunberg", 
@@ -269,7 +269,7 @@ const personalities = [
     id: "stallone", 
     name: "Sylvester Stallone", 
     description: "Action movie star",
-    catchPhrase: "Yo, I’ll fight to the end!" 
+    catchPhrase: "Yo, I'll fight to the end!" 
   },
   { 
     id: "aristotle", 
@@ -287,7 +287,7 @@ const personalities = [
     id: "shakira", 
     name: "Shakira", 
     description: "Latin pop star",
-    catchPhrase: "Hips don’t lie, baby!" 
+    catchPhrase: "Hips don't lie, baby!" 
   },
   { 
     id: "jesus", 
@@ -311,13 +311,13 @@ const personalities = [
     id: "galileo", 
     name: "Galileo Galilei", 
     description: "Astronomer & physicist",
-    catchPhrase: "The stars don’t lie!" 
+    catchPhrase: "The stars don't lie!" 
   },
   { 
     id: "nin", 
     name: "Anaïs Nin", 
     description: "Erotic writer",
-    catchPhrase: "Life’s too short for boring!" 
+    catchPhrase: "Life's too short for boring!" 
   },
   { 
     id: "bolt", 
@@ -329,7 +329,7 @@ const personalities = [
     id: "chaplin", 
     name: "Cher", 
     description: "Pop diva",
-    catchPhrase: "Turn back time, keep shinin’!" 
+    catchPhrase: "Turn back time, keep shinin'!" 
   },
   { 
     id: "elon", 
@@ -426,7 +426,7 @@ const personalities = [
     id: "oprah", 
     name: "Oprah Winfrey", 
     description: "Media mogul & philanthropist",
-    catchPhrase: "Live your best life, y’all!" 
+    catchPhrase: "Live your best life, y'all!" 
   },
   { 
     id: "gandhi", 
@@ -444,7 +444,7 @@ const personalities = [
     id: "mlk", 
     name: "Martin Luther King Jr.", 
     description: "Civil rights icon",
-    catchPhrase: "I have a dream, and it’s big!" 
+    catchPhrase: "I have a dream, and it's big!" 
   },
   { 
     id: "lebron", 
@@ -510,13 +510,13 @@ const personalities = [
     id: "tesla", 
     name: "Nikola Tesla", 
     description: "Inventor & electrical genius",
-    catchPhrase: "The future’s electric, baby!" 
+    catchPhrase: "The future's electric, baby!" 
   },
   { 
     id: "latifah", 
     name: "Queen Latifah", 
     description: "Rapper & actress",
-    catchPhrase: "Unity is strength, y’all!" 
+    catchPhrase: "Unity is strength, y'all!" 
   },
   { 
     id: "modi", 
@@ -840,9 +840,6 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-2">
               <ThemeToggle />
-              <button className="rounded-lg p-2 transition-all duration-200 hover:bg-accent hover:rotate-12 group">
-                <Settings size={18} className="transition-transform group-hover:rotate-180" />
-          </button>
             </div>
         </header>
 

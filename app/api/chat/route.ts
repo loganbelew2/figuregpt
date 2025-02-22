@@ -51,7 +51,7 @@ export async function POST(request: Request) {
         'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
-        'X-Title': process.env.NEXT_PUBLIC_APP_NAME || 'AI Personality Chat',
+        'X-Title': process.env.NEXT_PUBLIC_APP_NAME || 'Figure Gpt',
       },
       body: JSON.stringify({
         model: 'deepseek/deepseek-chat',
