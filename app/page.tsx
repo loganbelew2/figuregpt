@@ -882,9 +882,8 @@ export default function Home() {
             className="flex-1 overflow-y-auto relative h-[calc(100vh-8rem)]"
             ref={chatContainerRef}
           >
-            <div className="mx-auto max-w-3xl space-y-6 p-4">
-              {messages.filter((message) => message.role !== "system")
-                .length === 0 ? (
+            <div className="mx-auto max-w-3xl space-y-6 p-4 overflow-x-hidden">
+              {messages.filter((message) => message.role !== "system").length === 0 ? (
                 <div className="flex h-[calc(100vh-12rem)] flex-col items-center justify-center text-center px-4">
                   <div className="mb-4 flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-1000">
                     <button
@@ -960,7 +959,7 @@ export default function Home() {
                           }
                         }}
                         className={cn(
-                          "group flex gap-2 rounded-lg p-2 md:gap-4 md:p-4 transition-all duration-300 animate-in slide-in-from-bottom-2 cursor-pointer w-full overflow-hidden",
+                          "group flex gap-2 rounded-lg p-2 md:gap-4 md:p-4 transition-all duration-300 animate-in slide-in-from-bottom-2 cursor-pointer w-full overflow-hidden break-words",
                           message.role === "assistant"
                             ? "bg-accent/50 hover:scale-[1.01] hover:bg-accent/60"
                             : "bg-background hover:bg-accent/5"
@@ -975,13 +974,13 @@ export default function Home() {
                             <MessageSquare size={16} />
                           </div>
                         )}
-                        <div className="flex-1 min-w-0 max-w-full overflow-hidden">
+                        <div className="flex-1 min-w-0 max-w-full break-words overflow-hidden">
                           <div className="mb-1 font-medium truncate">
                             {message.role === "assistant"
                               ? selectedPersonality.name
                               : "You"}
                           </div>
-                          <div className="whitespace-pre-wrap text-muted-foreground break-words hyphens-auto overflow-hidden text-sm md:text-base">
+                          <div className="whitespace-pre-wrap text-muted-foreground break-words overflow-wrap-anywhere overflow-x-hidden text-sm md:text-base">
                             {message.content}
                           </div>
                         </div>
