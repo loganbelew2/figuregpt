@@ -800,9 +800,9 @@ export default function Home() {
         )}
 
       {/* Main Content */}
-      <div className="flex flex-1 flex-col">
-        {/* Header */}
-          <header className="flex h-14 items-center justify-between border-b px-4 bg-background/50 backdrop-blur-sm">
+      <div className="flex flex-1 flex-col h-full">
+        {/* Header - Make sticky */}
+          <header className="flex h-14 items-center justify-between border-b px-4 bg-background/50 backdrop-blur-sm sticky top-0 z-30">
             <div className="flex items-center gap-2">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -843,8 +843,8 @@ export default function Home() {
             </div>
         </header>
 
-        {/* Chat Messages */}
-          <div className="flex-1 overflow-y-auto relative" ref={chatContainerRef}>
+        {/* Chat Messages - Make scrollable */}
+          <div className="flex-1 overflow-y-auto relative h-[calc(100vh-8rem)]" ref={chatContainerRef}>
           <div className="mx-auto max-w-3xl space-y-6 p-4">
               {messages.filter(message => message.role !== 'system').length === 0 ? (
                 <div className="flex h-[calc(100vh-12rem)] flex-col items-center justify-center text-center px-4">
@@ -956,8 +956,8 @@ export default function Home() {
             )}
         </div>
 
-        {/* Input Form */}
-          <div className="border-t bg-background/50 backdrop-blur-sm p-4">
+        {/* Input Form - Make sticky */}
+          <div className="border-t bg-background/50 backdrop-blur-sm p-4 sticky bottom-0 z-30">
           <form onSubmit={handleSubmit} className="mx-auto max-w-3xl">
               <div className="relative flex items-start">
                 <textarea
