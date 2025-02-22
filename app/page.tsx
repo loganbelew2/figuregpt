@@ -935,7 +935,7 @@ export default function Home() {
                           }, 1000);
                         }}
                         className={cn(
-                          "group flex gap-4 rounded-lg p-4 transition-all duration-300 animate-in slide-in-from-bottom-2 cursor-pointer w-full break-words overflow-hidden",
+                          "group flex gap-2 rounded-lg p-2 md:gap-4 md:p-4 transition-all duration-300 animate-in slide-in-from-bottom-2 cursor-pointer w-full break-words overflow-x-hidden",
                           message.role === "assistant"
                             ? "bg-accent/50 hover:scale-[1.01] hover:bg-accent/60"
                             : "bg-background hover:bg-accent/5"
