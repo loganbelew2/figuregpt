@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Menu, MessageSquare, Send, User, Search, X, Trash2 } from "lucide-react";
+import {
+  Menu,
+  MessageSquare,
+  Send,
+  User,
+  Search,
+  X,
+  Trash2,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
@@ -20,8 +28,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useChat } from '@/hooks/use-chat';
-import { ChatHistory } from '@/lib/chat-service';
+import { useChat } from "@/hooks/use-chat";
+import { ChatHistory } from "@/lib/chat-service";
 import {
   Dialog,
   DialogContent,
@@ -31,505 +39,505 @@ import {
 } from "@/components/ui/dialog";
 
 const personalities = [
-  { 
-    id: "ali", 
-    name: "Muhammad Ali", 
+  {
+    id: "ali",
+    name: "Muhammad Ali",
     description: "Boxing legend & activist",
-    catchPhrase: "Float like a butterfly, sting like a bee!" 
+    catchPhrase: "Float like a butterfly, sting like a bee!",
   },
-  { 
-    id: "jolie", 
-    name: "Angelina Jolie", 
+  {
+    id: "jolie",
+    name: "Angelina Jolie",
     description: "Actress & humanitarian",
-    catchPhrase: "Make a difference, one life at a time!" 
+    catchPhrase: "Make a difference, one life at a time!",
   },
-  { 
-    id: "gates", 
-    name: "Bill Gates", 
+  {
+    id: "gates",
+    name: "Bill Gates",
     description: "Microsoft founder & philanthropist",
-    catchPhrase: "Tech can solve the world's problems!" 
+    catchPhrase: "Tech can solve the world's problems!",
   },
-  { 
-    id: "marley", 
-    name: "Bob Marley", 
+  {
+    id: "marley",
+    name: "Bob Marley",
     description: "Reggae icon",
-    catchPhrase: "One love, one heart, let's get together!" 
+    catchPhrase: "One love, one heart, let's get together!",
   },
-  { 
-    id: "merkel", 
-    name: "Angela Merkel", 
+  {
+    id: "merkel",
+    name: "Angela Merkel",
     description: "Former German Chancellor",
-    catchPhrase: "Stability is strength, y'all!" 
+    catchPhrase: "Stability is strength, y'all!",
   },
-  { 
-    id: "picasso", 
-    name: "Pablo Picasso", 
+  {
+    id: "picasso",
+    name: "Pablo Picasso",
     description: "Cubist art pioneer",
-    catchPhrase: "Break the rules, paint the truth!" 
+    catchPhrase: "Break the rules, paint the truth!",
   },
-  { 
-    id: "jordan", 
-    name: "Michael Jordan", 
+  {
+    id: "jordan",
+    name: "Michael Jordan",
     description: "Basketball GOAT",
-    catchPhrase: "I can fly, and I'll prove it!" 
+    catchPhrase: "I can fly, and I'll prove it!",
   },
-  { 
-    id: "winehouse", 
-    name: "Amy Winehouse", 
+  {
+    id: "winehouse",
+    name: "Amy Winehouse",
     description: "Soul singer",
-    catchPhrase: "Love's a losing game, but I'm playin'!" 
+    catchPhrase: "Love's a losing game, but I'm playin'!",
   },
-  { 
-    id: "newton", 
-    name: "Isaac Newton", 
+  {
+    id: "newton",
+    name: "Isaac Newton",
     description: "Physicist & mathematician",
-    catchPhrase: "Gravity's my jam, apples included!" 
+    catchPhrase: "Gravity's my jam, apples included!",
   },
-  { 
-    id: "dylan", 
-    name: "Bob Dylan", 
+  {
+    id: "dylan",
+    name: "Bob Dylan",
     description: "Folk music legend",
-    catchPhrase: "The times, they are a-changin'!" 
+    catchPhrase: "The times, they are a-changin'!",
   },
-  { 
-    id: "monroe", 
-    name: "Marilyn Monroe", 
+  {
+    id: "monroe",
+    name: "Marilyn Monroe",
     description: "Hollywood icon",
-    catchPhrase: "Diamonds are a girl's best friend!" 
+    catchPhrase: "Diamonds are a girl's best friend!",
   },
-  { 
-    id: "darwin", 
-    name: "Charles Darwin", 
+  {
+    id: "darwin",
+    name: "Charles Darwin",
     description: "Evolution theorist",
-    catchPhrase: "Survival's for the fittest, baby!" 
+    catchPhrase: "Survival's for the fittest, baby!",
   },
-  { 
-    id: "prince", 
-    name: "Prince", 
+  {
+    id: "prince",
+    name: "Prince",
     description: "Music innovator",
-    catchPhrase: "Party like it's 1999, every day!" 
+    catchPhrase: "Party like it's 1999, every day!",
   },
-  { 
-    id: "rosa", 
-    name: "Rosa Parks", 
+  {
+    id: "rosa",
+    name: "Rosa Parks",
     description: "Civil rights pioneer",
-    catchPhrase: "I'm sittin' for justice, y'all!" 
+    catchPhrase: "I'm sittin' for justice, y'all!",
   },
-  { 
-    id: "messi", 
-    name: "Lionel Messi", 
+  {
+    id: "messi",
+    name: "Lionel Messi",
     description: "Soccer superstar",
-    catchPhrase: "Goals are my language!" 
+    catchPhrase: "Goals are my language!",
   },
-  { 
-    id: "diana", 
-    name: "Princess Diana", 
+  {
+    id: "diana",
+    name: "Princess Diana",
     description: "People's Princess",
-    catchPhrase: "Love is the crown I wear!" 
+    catchPhrase: "Love is the crown I wear!",
   },
-  { 
-    id: "edison", 
-    name: "Thomas Edison", 
+  {
+    id: "edison",
+    name: "Thomas Edison",
     description: "Inventor of the light bulb",
-    catchPhrase: "I'll light up the world!" 
+    catchPhrase: "I'll light up the world!",
   },
-  { 
-    id: "ladygaga", 
-    name: "Lady Gaga", 
+  {
+    id: "ladygaga",
+    name: "Lady Gaga",
     description: "Pop provocateur",
-    catchPhrase: "Born this way, baby!" 
+    catchPhrase: "Born this way, baby!",
   },
-  { 
-    id: "churchill", 
-    name: "Winston Churchill", 
+  {
+    id: "churchill",
+    name: "Winston Churchill",
     description: "WWII British Prime Minister",
-    catchPhrase: "We shall never surrender!" 
+    catchPhrase: "We shall never surrender!",
   },
-  { 
-    id: "sinatra", 
-    name: "Frank Sinatra", 
+  {
+    id: "sinatra",
+    name: "Frank Sinatra",
     description: "Crooner legend",
-    catchPhrase: "I did it my way!" 
+    catchPhrase: "I did it my way!",
   },
-  { 
-    id: "kobe", 
-    name: "Kobe Bryant", 
+  {
+    id: "kobe",
+    name: "Kobe Bryant",
     description: "Basketball icon",
-    catchPhrase: "Mamba mentality, all day!" 
+    catchPhrase: "Mamba mentality, all day!",
   },
-  { 
-    id: "rowling", 
-    name: "J.K. Rowling", 
+  {
+    id: "rowling",
+    name: "J.K. Rowling",
     description: "Harry Potter author",
-    catchPhrase: "Magic's real if you believe!" 
+    catchPhrase: "Magic's real if you believe!",
   },
-  { 
-    id: "pavarotti", 
-    name: "Luciano Pavarotti", 
+  {
+    id: "pavarotti",
+    name: "Luciano Pavarotti",
     description: "Opera maestro",
-    catchPhrase: "Sing 'til the world hears ya!" 
+    catchPhrase: "Sing 'til the world hears ya!",
   },
-  { 
-    id: "earhart", 
-    name: "Amelia Earhart", 
+  {
+    id: "earhart",
+    name: "Amelia Earhart",
     description: "Aviation pioneer",
-    catchPhrase: "Fly high, fear nothing!" 
+    catchPhrase: "Fly high, fear nothing!",
   },
-  { 
-    id: "brucelee", 
-    name: "Bruce Lee", 
+  {
+    id: "brucelee",
+    name: "Bruce Lee",
     description: "Martial arts legend",
-    catchPhrase: "Be water, my friend!" 
+    catchPhrase: "Be water, my friend!",
   },
-  { 
-    id: "trudeau", 
-    name: "Justin Trudeau", 
+  {
+    id: "trudeau",
+    name: "Justin Trudeau",
     description: "Canadian Prime Minister",
-    catchPhrase: "Stronger together, eh!" 
+    catchPhrase: "Stronger together, eh!",
   },
-  { 
-    id: "madonna", 
-    name: "Madonna", 
+  {
+    id: "madonna",
+    name: "Madonna",
     description: "Pop music queen",
-    catchPhrase: "Vogue your way to the top!" 
+    catchPhrase: "Vogue your way to the top!",
   },
-  { 
-    id: "lincoln", 
-    name: "Abraham Lincoln", 
+  {
+    id: "lincoln",
+    name: "Abraham Lincoln",
     description: "16th US President",
-    catchPhrase: "United we stand, fam!" 
+    catchPhrase: "United we stand, fam!",
   },
-  { 
-    id: "tyson", 
-    name: "Mike Tyson", 
+  {
+    id: "tyson",
+    name: "Mike Tyson",
     description: "Heavyweight champ",
-    catchPhrase: "Bite the ring, win the fight!" 
+    catchPhrase: "Bite the ring, win the fight!",
   },
-  { 
-    id: "banksy", 
-    name: "Banksy", 
+  {
+    id: "banksy",
+    name: "Banksy",
     description: "Street art enigma",
-    catchPhrase: "Art's my silent rebellion!" 
+    catchPhrase: "Art's my silent rebellion!",
   },
-  { 
-    id: "hendrix", 
-    name: "Jimi Hendrix", 
+  {
+    id: "hendrix",
+    name: "Jimi Hendrix",
     description: "Guitar god",
-    catchPhrase: "Let me blow your mind!" 
+    catchPhrase: "Let me blow your mind!",
   },
-  { 
-    id: "austen", 
-    name: "Jane Austen", 
+  {
+    id: "austen",
+    name: "Jane Austen",
     description: "Novelist of romance",
-    catchPhrase: "Love's a story worth tellin'!" 
+    catchPhrase: "Love's a story worth tellin'!",
   },
-  { 
-    id: "pele", 
-    name: "Pelé", 
+  {
+    id: "pele",
+    name: "Pelé",
     description: "Soccer legend",
-    catchPhrase: "The beautiful game's my life!" 
+    catchPhrase: "The beautiful game's my life!",
   },
-  { 
-    id: "warhol", 
-    name: "Andy Warhol", 
+  {
+    id: "warhol",
+    name: "Andy Warhol",
     description: "Pop art pioneer",
-    catchPhrase: "Fame's my canvas, y'all!" 
+    catchPhrase: "Fame's my canvas, y'all!",
   },
-  { 
-    id: "motherteresa", 
-    name: "Mother Teresa", 
+  {
+    id: "motherteresa",
+    name: "Mother Teresa",
     description: "Saint of the poor",
-    catchPhrase: "Love 'til it hurts!" 
+    catchPhrase: "Love 'til it hurts!",
   },
-  { 
-    id: "cruz", 
-    name: "Penélope Cruz", 
+  {
+    id: "cruz",
+    name: "Penélope Cruz",
     description: "Spanish actress",
-    catchPhrase: "Passion's my script!" 
+    catchPhrase: "Passion's my script!",
   },
-  { 
-    id: "freud", 
-    name: "Sigmund Freud", 
+  {
+    id: "freud",
+    name: "Sigmund Freud",
     description: "Father of psychoanalysis",
-    catchPhrase: "Dreams are the key, baby!" 
+    catchPhrase: "Dreams are the key, baby!",
   },
-  { 
-    id: "bowie", 
-    name: "David Bowie", 
+  {
+    id: "bowie",
+    name: "David Bowie",
     description: "Rock chameleon",
-    catchPhrase: "Let's dance through the stars!" 
+    catchPhrase: "Let's dance through the stars!",
   },
-  { 
-    id: "thunberg", 
-    name: "Greta Thunberg", 
+  {
+    id: "thunberg",
+    name: "Greta Thunberg",
     description: "Climate activist",
-    catchPhrase: "Save the planet, now!" 
+    catchPhrase: "Save the planet, now!",
   },
-  { 
-    id: "stallone", 
-    name: "Sylvester Stallone", 
+  {
+    id: "stallone",
+    name: "Sylvester Stallone",
     description: "Action movie star",
-    catchPhrase: "Yo, I'll fight to the end!" 
+    catchPhrase: "Yo, I'll fight to the end!",
   },
-  { 
-    id: "aristotle", 
-    name: "Aristotle", 
+  {
+    id: "aristotle",
+    name: "Aristotle",
     description: "Greek philosopher",
-    catchPhrase: "Knowledge is the ultimate power!" 
+    catchPhrase: "Knowledge is the ultimate power!",
   },
-  { 
-    id: "hawn", 
-    name: "Goldie Hawn", 
+  {
+    id: "hawn",
+    name: "Goldie Hawn",
     description: "Comedy actress",
-    catchPhrase: "Laugh loud, live free!" 
+    catchPhrase: "Laugh loud, live free!",
   },
-  { 
-    id: "shakira", 
-    name: "Shakira", 
+  {
+    id: "shakira",
+    name: "Shakira",
     description: "Latin pop star",
-    catchPhrase: "Hips don't lie, baby!" 
+    catchPhrase: "Hips don't lie, baby!",
   },
-  { 
-    id: "jesus", 
-    name: "Jesus Christ", 
+  {
+    id: "jesus",
+    name: "Jesus Christ",
     description: "Central figure of Christianity",
-    catchPhrase: "Love your neighbor, always!" 
+    catchPhrase: "Love your neighbor, always!",
   },
-  { 
-    id: "twain", 
-    name: "Mark Twain", 
+  {
+    id: "twain",
+    name: "Mark Twain",
     description: "American author",
-    catchPhrase: "Write what you know, fam!" 
+    catchPhrase: "Write what you know, fam!",
   },
-  { 
-    id: "kardashian", 
-    name: "Kim Kardashian", 
+  {
+    id: "kardashian",
+    name: "Kim Kardashian",
     description: "Reality TV star & entrepreneur",
-    catchPhrase: "Slay the game, every day!" 
+    catchPhrase: "Slay the game, every day!",
   },
-  { 
-    id: "galileo", 
-    name: "Galileo Galilei", 
+  {
+    id: "galileo",
+    name: "Galileo Galilei",
     description: "Astronomer & physicist",
-    catchPhrase: "The stars don't lie!" 
+    catchPhrase: "The stars don't lie!",
   },
-  { 
-    id: "nin", 
-    name: "Anaïs Nin", 
+  {
+    id: "nin",
+    name: "Anaïs Nin",
     description: "Erotic writer",
-    catchPhrase: "Life's too short for boring!" 
+    catchPhrase: "Life's too short for boring!",
   },
-  { 
-    id: "bolt", 
-    name: "Simone Biles", 
+  {
+    id: "bolt",
+    name: "Simone Biles",
     description: "Gymnastics phenom",
-    catchPhrase: "Flip it, win it!" 
+    catchPhrase: "Flip it, win it!",
   },
-  { 
-    id: "chaplin", 
-    name: "Cher", 
+  {
+    id: "chaplin",
+    name: "Cher",
     description: "Pop diva",
-    catchPhrase: "Turn back time, keep shinin'!" 
+    catchPhrase: "Turn back time, keep shinin'!",
   },
-  { 
-    id: "elon", 
-    name: "Elon Musk", 
+  {
+    id: "elon",
+    name: "Elon Musk",
     description: "Tech visionary & entrepreneur",
-    catchPhrase: "Let's make humanity a multi-planetary species!" 
+    catchPhrase: "Let's make humanity a multi-planetary species!",
   },
-  { 
-    id: "obama", 
-    name: "Barack Obama", 
+  {
+    id: "obama",
+    name: "Barack Obama",
     description: "44th US President",
-    catchPhrase: "Yes we can change the world together!" 
+    catchPhrase: "Yes we can change the world together!",
   },
-  { 
-    id: "trump", 
-    name: "Donald Trump", 
+  {
+    id: "trump",
+    name: "Donald Trump",
     description: "45th US President",
-    catchPhrase: "Let's make everything tremendous again!" 
+    catchPhrase: "Let's make everything tremendous again!",
   },
-  { 
-    id: "putin", 
-    name: "Vladimir Putin", 
+  {
+    id: "putin",
+    name: "Vladimir Putin",
     description: "Russian President",
-    catchPhrase: "Power is nothing without strategic control." 
+    catchPhrase: "Power is nothing without strategic control.",
   },
-  { 
-    id: "kim", 
-    name: "Kim Jong-un", 
+  {
+    id: "kim",
+    name: "Kim Jong-un",
     description: "North Korean leader",
-    catchPhrase: "Supreme excellence in leadership!" 
+    catchPhrase: "Supreme excellence in leadership!",
   },
-  { 
-    id: "taylor", 
-    name: "Taylor Swift", 
+  {
+    id: "taylor",
+    name: "Taylor Swift",
     description: "Pop icon & songwriter",
-    catchPhrase: "Haters gonna hate, but we're gonna shake it off!" 
+    catchPhrase: "Haters gonna hate, but we're gonna shake it off!",
   },
-  { 
-    id: "attenborough", 
-    name: "David Attenborough", 
+  {
+    id: "attenborough",
+    name: "David Attenborough",
     description: "Natural historian",
-    catchPhrase: "The wonders of our natural world await..." 
+    catchPhrase: "The wonders of our natural world await...",
   },
-  { 
-    id: "einstein", 
-    name: "Albert Einstein", 
+  {
+    id: "einstein",
+    name: "Albert Einstein",
     description: "Theoretical physicist",
-    catchPhrase: "Imagination is more important than knowledge!" 
+    catchPhrase: "Imagination is more important than knowledge!",
   },
-  { 
-    id: "shakespeare", 
-    name: "William Shakespeare", 
+  {
+    id: "shakespeare",
+    name: "William Shakespeare",
     description: "Legendary playwright & poet",
-    catchPhrase: "All the world's a stage, shall we begin?" 
+    catchPhrase: "All the world's a stage, shall we begin?",
   },
-  { 
-    id: "curie", 
-    name: "Marie Curie", 
+  {
+    id: "curie",
+    name: "Marie Curie",
     description: "Pioneer in radioactivity",
-    catchPhrase: "Nothing in life is to be feared, only discovered." 
+    catchPhrase: "Nothing in life is to be feared, only discovered.",
   },
-  { 
-    id: "jobs", 
-    name: "Steve Jobs", 
+  {
+    id: "jobs",
+    name: "Steve Jobs",
     description: "Apple co-founder & innovator",
-    catchPhrase: "Let's put a dent in the universe together!" 
+    catchPhrase: "Let's put a dent in the universe together!",
   },
-  { 
-    id: "frida", 
-    name: "Frida Kahlo", 
+  {
+    id: "frida",
+    name: "Frida Kahlo",
     description: "Revolutionary artist",
-    catchPhrase: "Paint your reality with vibrant colors!" 
+    catchPhrase: "Paint your reality with vibrant colors!",
   },
-  { 
-    id: "hawking", 
-    name: "Stephen Hawking", 
+  {
+    id: "hawking",
+    name: "Stephen Hawking",
     description: "Theoretical physicist & author",
-    catchPhrase: "Look up at the stars, not down at your feet." 
+    catchPhrase: "Look up at the stars, not down at your feet.",
   },
   // New additions start here
-  { 
-    id: "beyonce", 
-    name: "Beyoncé", 
+  {
+    id: "beyonce",
+    name: "Beyoncé",
     description: "Global music superstar",
-    catchPhrase: "Who run the world? Girls!" 
+    catchPhrase: "Who run the world? Girls!",
   },
-  { 
-    id: "mandela", 
-    name: "Nelson Mandela", 
+  {
+    id: "mandela",
+    name: "Nelson Mandela",
     description: "Anti-apartheid revolutionary",
-    catchPhrase: "Freedom is worth fighting for!" 
+    catchPhrase: "Freedom is worth fighting for!",
   },
-  { 
-    id: "oprah", 
-    name: "Oprah Winfrey", 
+  {
+    id: "oprah",
+    name: "Oprah Winfrey",
     description: "Media mogul & philanthropist",
-    catchPhrase: "Live your best life, y'all!" 
+    catchPhrase: "Live your best life, y'all!",
   },
-  { 
-    id: "gandhi", 
-    name: "Mahatma Gandhi", 
+  {
+    id: "gandhi",
+    name: "Mahatma Gandhi",
     description: "Leader of nonviolent resistance",
-    catchPhrase: "Be the change you wanna see!" 
+    catchPhrase: "Be the change you wanna see!",
   },
-  { 
-    id: "rihanna", 
-    name: "Rihanna", 
+  {
+    id: "rihanna",
+    name: "Rihanna",
     description: "Singer & business tycoon",
-    catchPhrase: "Work hard, shine bright!" 
+    catchPhrase: "Work hard, shine bright!",
   },
-  { 
-    id: "mlk", 
-    name: "Martin Luther King Jr.", 
+  {
+    id: "mlk",
+    name: "Martin Luther King Jr.",
     description: "Civil rights icon",
-    catchPhrase: "I have a dream, and it's big!" 
+    catchPhrase: "I have a dream, and it's big!",
   },
-  { 
-    id: "lebron", 
-    name: "LeBron James", 
+  {
+    id: "lebron",
+    name: "LeBron James",
     description: "Basketball legend",
-    catchPhrase: "Strive for greatness every day!" 
+    catchPhrase: "Strive for greatness every day!",
   },
-  { 
-    id: "malala", 
-    name: "Malala Yousafzai", 
+  {
+    id: "malala",
+    name: "Malala Yousafzai",
     description: "Education activist",
-    catchPhrase: "One book can change the world!" 
+    catchPhrase: "One book can change the world!",
   },
-  { 
-    id: "bolt", 
-    name: "Usain Bolt", 
+  {
+    id: "bolt",
+    name: "Usain Bolt",
     description: "Fastest man alive",
-    catchPhrase: "Speed is my superpower!" 
+    catchPhrase: "Speed is my superpower!",
   },
-  { 
-    id: "cleopatra", 
-    name: "Cleopatra", 
+  {
+    id: "cleopatra",
+    name: "Cleopatra",
     description: "Egyptian queen",
-    catchPhrase: "Rule with beauty and brains!" 
+    catchPhrase: "Rule with beauty and brains!",
   },
-  { 
-    id: "xi", 
-    name: "Xi Jinping", 
+  {
+    id: "xi",
+    name: "Xi Jinping",
     description: "Chinese President",
-    catchPhrase: "The future is ours to build!" 
+    catchPhrase: "The future is ours to build!",
   },
-  { 
-    id: "serena", 
-    name: "Serena Williams", 
+  {
+    id: "serena",
+    name: "Serena Williams",
     description: "Tennis champion",
-    catchPhrase: "Serve it up, win it all!" 
+    catchPhrase: "Serve it up, win it all!",
   },
-  { 
-    id: "chaplin", 
-    name: "Charlie Chaplin", 
+  {
+    id: "chaplin",
+    name: "Charlie Chaplin",
     description: "Silent film icon",
-    catchPhrase: "Laughter is the best medicine!" 
+    catchPhrase: "Laughter is the best medicine!",
   },
-  { 
-    id: "angelou", 
-    name: "Maya Angelou", 
+  {
+    id: "angelou",
+    name: "Maya Angelou",
     description: "Poet & civil rights voice",
-    catchPhrase: "Rise up, still I rise!" 
+    catchPhrase: "Rise up, still I rise!",
   },
-  { 
-    id: "zuckerberg", 
-    name: "Mark Zuckerberg", 
+  {
+    id: "zuckerberg",
+    name: "Mark Zuckerberg",
     description: "Facebook founder",
-    catchPhrase: "Connect the world, one click at a time!" 
+    catchPhrase: "Connect the world, one click at a time!",
   },
-  { 
-    id: "adele", 
-    name: "Adele", 
+  {
+    id: "adele",
+    name: "Adele",
     description: "Soulful singer",
-    catchPhrase: "Hello from the other side of heartbreak!" 
+    catchPhrase: "Hello from the other side of heartbreak!",
   },
-  { 
-    id: "tesla", 
-    name: "Nikola Tesla", 
+  {
+    id: "tesla",
+    name: "Nikola Tesla",
     description: "Inventor & electrical genius",
-    catchPhrase: "The future's electric, baby!" 
+    catchPhrase: "The future's electric, baby!",
   },
-  { 
-    id: "latifah", 
-    name: "Queen Latifah", 
+  {
+    id: "latifah",
+    name: "Queen Latifah",
     description: "Rapper & actress",
-    catchPhrase: "Unity is strength, y'all!" 
+    catchPhrase: "Unity is strength, y'all!",
   },
-  { 
-    id: "modi", 
-    name: "Narendra Modi", 
+  {
+    id: "modi",
+    name: "Narendra Modi",
     description: "Indian Prime Minister",
-    catchPhrase: "Together, we transform India!" 
+    catchPhrase: "Together, we transform India!",
   },
-  { 
-    id: "dali", 
-    name: "Salvador Dalí", 
+  {
+    id: "dali",
+    name: "Salvador Dalí",
     description: "Surrealist artist",
-    catchPhrase: "Dream wild, paint wilder!" 
-  }
+    catchPhrase: "Dream wild, paint wilder!",
+  },
 ];
 
 const moods = [
@@ -568,18 +576,24 @@ const FEATURED_PERSONALITIES = personalities
   .slice(0, 10)
   .sort((a, b) => a.name.localeCompare(b.name));
 
-const ALL_PERSONALITIES = [...personalities].sort((a, b) => a.name.localeCompare(b.name));
+const ALL_PERSONALITIES = [...personalities].sort((a, b) =>
+  a.name.localeCompare(b.name)
+);
 
 export default function Home() {
   const [input, setInput] = useState("");
-  const [selectedPersonality, setSelectedPersonality] = useState<Personality>(personalities[0]);
+  const [selectedPersonality, setSelectedPersonality] = useState<Personality>(
+    personalities[0]
+  );
   const [selectedMood, setSelectedMood] = useState<Mood>(moods[0]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isEmojiAnimating, setIsEmojiAnimating] = useState(false);
   const [newChatDialogOpen, setNewChatDialogOpen] = useState(false);
-  const [tempPersonality, setTempPersonality] = useState<Personality>(personalities[0]);
+  const [tempPersonality, setTempPersonality] = useState<Personality>(
+    personalities[0]
+  );
   const [tempMood, setTempMood] = useState<Mood>(moods[0]);
   const [allPersonalitiesOpen, setAllPersonalitiesOpen] = useState(false);
   const [personalitySearch, setPersonalitySearch] = useState("");
@@ -587,15 +601,15 @@ export default function Home() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
 
-  const { 
-    messages, 
-    isLoading, 
-    sendMessage, 
+  const {
+    messages,
+    isLoading,
+    sendMessage,
     clearMessages,
     updateMood,
     createNewChat,
     deleteHistory,
-    histories 
+    histories,
   } = useChat({
     personality: selectedPersonality.name,
     mood: selectedMood.name,
@@ -609,8 +623,8 @@ export default function Home() {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   useEffect(() => {
@@ -623,8 +637,8 @@ export default function Home() {
       setShouldAutoScroll(isAtBottom);
     };
 
-    chatContainer.addEventListener('scroll', handleScroll);
-    return () => chatContainer.removeEventListener('scroll', handleScroll);
+    chatContainer.addEventListener("scroll", handleScroll);
+    return () => chatContainer.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToBottom = () => {
@@ -649,9 +663,9 @@ export default function Home() {
     const message = input;
     setInput("");
     // Reset textarea height after sending
-    const textarea = document.querySelector('textarea');
+    const textarea = document.querySelector("textarea");
     if (textarea) {
-      textarea.style.height = '44px';
+      textarea.style.height = "44px";
     }
     await sendMessage(message);
   };
@@ -665,9 +679,11 @@ export default function Home() {
   };
 
   const handleHistoryClick = (history: ChatHistory) => {
-    const personality = personalities.find(p => p.id === history.personality.id);
-    const mood = moods.find(m => m.id === history.mood.id);
-    
+    const personality = personalities.find(
+      (p) => p.id === history.personality.id
+    );
+    const mood = moods.find((m) => m.id === history.mood.id);
+
     if (personality && mood) {
       setSelectedPersonality(personality);
       setSelectedMood(mood);
@@ -684,7 +700,10 @@ export default function Home() {
 
   const handleStartNewChat = () => {
     // Only create a new chat if personality or mood changes
-    if (selectedPersonality.id !== tempPersonality.id || selectedMood.id !== tempMood.id) {
+    if (
+      selectedPersonality.id !== tempPersonality.id ||
+      selectedMood.id !== tempMood.id
+    ) {
       setSelectedPersonality(tempPersonality);
       setSelectedMood(tempMood);
       createNewChat();
@@ -701,7 +720,7 @@ export default function Home() {
   return (
     <>
       {/* Cursor followers */}
-      <div 
+      <div
         className="pointer-events-none fixed inset-0 z-[100] transition-opacity duration-300 lg:block hidden"
         aria-hidden="true"
       >
@@ -711,7 +730,7 @@ export default function Home() {
           style={{
             left: `${mousePosition.x}px`,
             top: `${mousePosition.y}px`,
-            transform: 'translate(-50%, -50%)',
+            transform: "translate(-50%, -50%)",
           }}
         />
         {/* Cursor dot */}
@@ -720,57 +739,66 @@ export default function Home() {
           style={{
             left: `${mousePosition.x}px`,
             top: `${mousePosition.y}px`,
-            transform: 'translate(-50%, -50%)',
+            transform: "translate(-50%, -50%)",
           }}
         />
       </div>
 
       <div className="flex h-screen bg-background transition-colors duration-300">
-      {/* Sidebar */}
-      <div
-        className={cn(
+        {/* Sidebar */}
+        <div
+          className={cn(
             "fixed inset-y-0 left-0 z-40 flex w-[80%] flex-col border-r bg-card/50 backdrop-blur-sm transition-all duration-300 ease-in-out md:w-72 md:relative",
-          !sidebarOpen && "-translate-x-full md:translate-x-0"
-        )}
-      >
-        <div className="flex h-full flex-col gap-2 p-4">
-          <button
+            !sidebarOpen && "-translate-x-full md:translate-x-0"
+          )}
+        >
+          <div className="flex h-full flex-col gap-2 p-4">
+            <button
               className="group flex items-center gap-2 rounded-lg bg-primary/5 p-4 text-primary transition-all duration-200 hover:bg-primary/10 hover:scale-[1.02] active:scale-[0.98]"
               onClick={handleNewChatClick}
-          >
-              <MessageSquare size={18} className="transition-transform group-hover:rotate-12" />
-            <span className="font-medium">New Chat</span>
-          </button>
+            >
+              <MessageSquare
+                size={18}
+                className="transition-transform group-hover:rotate-12"
+              />
+              <span className="font-medium">New Chat</span>
+            </button>
 
-          <div className="mt-8">
-              <h2 className="mb-4 px-2 text-sm font-medium text-muted-foreground">Chat History</h2>
+            <div className="mt-8">
+              <h2 className="mb-4 px-2 text-sm font-medium text-muted-foreground">
+                Chat History
+              </h2>
               <div className="space-y-1">
                 {histories.length === 0 ? (
                   <div className="px-2 py-3 text-sm text-muted-foreground">
                     No chat history. Start a conversation!
-            </div>
+                  </div>
                 ) : (
                   histories.map((history) => (
                     <div
                       key={history.id}
                       onClick={() => handleHistoryClick(history)}
-                  className={cn(
+                      className={cn(
                         "group relative w-full rounded-md px-3 py-2 text-left transition-all duration-200",
-                        selectedPersonality.id === history.personality.id && 
-                        selectedMood.id === history.mood.id
+                        selectedPersonality.id === history.personality.id &&
+                          selectedMood.id === history.mood.id
                           ? "bg-primary/10 text-primary scale-[1.02]"
                           : "hover:bg-accent hover:scale-[1.01]"
-                  )}
-                >
-                  <div className="flex items-center gap-2">
+                      )}
+                    >
+                      <div className="flex items-center gap-2">
                         <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-md bg-primary/10 text-primary transition-transform group-hover:rotate-12">
                           {history.mood.emoji}
                         </div>
-                    <div className="flex-1 truncate">
+                        <div className="flex-1 truncate">
                           <div className="font-medium flex items-center gap-2">
                             <span>{history.personality.name}</span>
-                            <span className="text-xs text-muted-foreground">•</span>
-                            <span className="text-xs text-muted-foreground">{history.mood.name}</span>
+                            <span className="text-xs text-muted-foreground">
+                              •
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              {history.mood.name}
+                            </span>
                           </div>
                           <div className="text-xs text-muted-foreground truncate">
                             {history.lastMessage}
@@ -786,7 +814,7 @@ export default function Home() {
                     </div>
                   ))
                 )}
-                  </div>
+              </div>
             </div>
           </div>
         </div>
@@ -799,54 +827,64 @@ export default function Home() {
           />
         )}
 
-      {/* Main Content */}
-      <div className="flex flex-1 flex-col h-full">
-        {/* Header - Make sticky */}
+        {/* Main Content */}
+        <div className="flex flex-1 flex-col h-full">
+          {/* Header - Make sticky */}
           <header className="flex h-14 items-center justify-between border-b px-4 bg-background/50 backdrop-blur-sm sticky top-0 z-30">
             <div className="flex items-center gap-2">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
                 className="rounded-lg p-2 transition-colors hover:bg-accent md:hidden"
-          >
-            <Menu size={20} />
-          </button>
+              >
+                <Menu size={20} />
+              </button>
               <div className="flex items-center gap-2">
-            <button
-              onClick={() => setSearchOpen(true)}
+                <button
+                  onClick={() => setSearchOpen(true)}
                   className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-all duration-200 hover:bg-accent hover:text-foreground hover:scale-[1.02] md:min-w-[180px]"
-            >
-              <User size={16} className="shrink-0" />
-                  <span className="hidden md:inline font-medium">{selectedPersonality.name}</span>
+                >
+                  <User size={16} className="shrink-0" />
+                  <span className="hidden md:inline font-medium">
+                    {selectedPersonality.name}
+                  </span>
                   <Search size={14} className="shrink-0 ml-auto" />
-            </button>
-            <DropdownMenu>
+                </button>
+                <DropdownMenu>
                   <DropdownMenuTrigger className="flex items-center gap-1 rounded-lg px-2 py-1.5 text-sm transition-all duration-200 hover:bg-accent group">
-                    <span className="group-hover:animate-bounce">{selectedMood.emoji}</span>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                {moods.map((mood) => (
-                  <DropdownMenuItem
-                    key={mood.id}
+                    <span className="group-hover:animate-bounce">
+                      {selectedMood.emoji}
+                    </span>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    {moods.map((mood) => (
+                      <DropdownMenuItem
+                        key={mood.id}
                         onClick={() => handleMoodChange(mood)}
                         className="group flex items-center gap-2 cursor-pointer transition-colors"
-                  >
-                        <span className="text-base group-hover:animate-bounce">{mood.emoji}</span>
-                    <span>{mood.name}</span>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+                      >
+                        <span className="text-base group-hover:animate-bounce">
+                          {mood.emoji}
+                        </span>
+                        <span>{mood.name}</span>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
             <div className="flex items-center gap-2">
               <ThemeToggle />
             </div>
-        </header>
+          </header>
 
-        {/* Chat Messages - Make scrollable */}
-          <div className="flex-1 overflow-y-auto relative h-[calc(100vh-8rem)]" ref={chatContainerRef}>
-          <div className="mx-auto max-w-3xl space-y-6 p-4">
-              {messages.filter(message => message.role !== 'system').length === 0 ? (
+          {/* Chat Messages - Make scrollable */}
+          <div
+            className="flex-1 overflow-y-auto relative h-[calc(100vh-8rem)]"
+            ref={chatContainerRef}
+          >
+            <div className="mx-auto max-w-3xl space-y-6 p-4">
+              {messages.filter((message) => message.role !== "system")
+                .length === 0 ? (
                 <div className="flex h-[calc(100vh-12rem)] flex-col items-center justify-center text-center px-4">
                   <div className="mb-4 flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-1000">
                     <button
@@ -869,52 +907,60 @@ export default function Home() {
                     </div>
                   </div>
                   <p className="text-base text-muted-foreground animate-in fade-in slide-in-from-bottom-4 duration-1200 mt-2">
-                    Start a conversation in {selectedMood.name.toLowerCase()} mood
+                    Start a conversation in {selectedMood.name.toLowerCase()}{" "}
+                    mood
                   </p>
-              </div>
-            ) : (
+                </div>
+              ) : (
                 <>
                   {messages
-                    .filter(message => message.role !== 'system')
+                    .filter((message) => message.role !== "system")
                     .map((message, index) => (
-                <div
-                  key={index}
+                      <div
+                        key={index}
                         onClick={() => {
                           navigator.clipboard.writeText(message.content);
-                          const notification = document.createElement('div');
-                          notification.className = 'fixed bottom-4 right-4 bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg shadow-lg animate-in fade-in slide-in-from-bottom-4 z-50';
-                          notification.textContent = 'Message copied!';
+                          const notification = document.createElement("div");
+                          notification.className =
+                            "fixed bottom-4 right-4 bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg shadow-lg animate-in fade-in slide-in-from-bottom-4 z-50";
+                          notification.textContent = "Message copied!";
                           document.body.appendChild(notification);
                           setTimeout(() => {
-                            notification.classList.add('animate-out', 'fade-out', 'slide-out-to-bottom-4');
+                            notification.classList.add(
+                              "animate-out",
+                              "fade-out",
+                              "slide-out-to-bottom-4"
+                            );
                             setTimeout(() => notification.remove(), 150);
                           }, 1000);
                         }}
-                  className={cn(
+                        className={cn(
                           "group flex gap-4 rounded-lg p-4 transition-all duration-300 animate-in slide-in-from-bottom-2 cursor-pointer w-full break-words overflow-hidden",
-                    message.role === "assistant"
+                          message.role === "assistant"
                             ? "bg-accent/50 hover:scale-[1.01] hover:bg-accent/60"
                             : "bg-background hover:bg-accent/5"
-                  )}
-                >
-                  {message.role === "assistant" ? (
+                        )}
+                      >
+                        {message.role === "assistant" ? (
                           <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-md bg-primary/10 text-primary transition-transform group-hover:rotate-12 group-hover:scale-110">
-                      {selectedMood.emoji}
-                    </div>
-                  ) : (
+                            {selectedMood.emoji}
+                          </div>
+                        ) : (
                           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-muted transition-transform group-hover:rotate-12 group-hover:scale-110">
-                      <MessageSquare size={16} />
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0 overflow-hidden">
-                    <div className="mb-1 font-medium truncate">
-                      {message.role === "assistant" ? selectedPersonality.name : "You"}
-                    </div>
-                    <div className="whitespace-pre-wrap text-muted-foreground break-words overflow-hidden overflow-wrap-anywhere">
-                      {message.content}
-                    </div>
-                  </div>
-                </div>
+                            <MessageSquare size={16} />
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0 overflow-x-hidden">
+                          <div className="mb-1 font-medium truncate">
+                            {message.role === "assistant"
+                              ? selectedPersonality.name
+                              : "You"}
+                          </div>
+                          <div className="whitespace-pre-wrap text-muted-foreground break-words overflow-wrap-anywhere">
+                            {message.content}
+                          </div>
+                        </div>
+                      </div>
                     ))}
                   {isLoading && (
                     <div className="group flex gap-4 rounded-lg p-4 bg-accent/50 backdrop-blur-sm animate-in fade-in-50 slide-in-from-bottom-2">
@@ -922,7 +968,9 @@ export default function Home() {
                         {selectedMood.emoji}
                       </div>
                       <div className="flex-1">
-                        <div className="mb-1 font-medium">{selectedPersonality.name}</div>
+                        <div className="mb-1 font-medium">
+                          {selectedPersonality.name}
+                        </div>
                         <div className="h-4 w-24 rounded-full bg-gradient-to-r from-blue-400 via-blue-500 to-blue-400 animate-gradient-x"></div>
                       </div>
                     </div>
@@ -931,45 +979,53 @@ export default function Home() {
                 </>
               )}
             </div>
-            {!shouldAutoScroll && messages.filter(message => message.role !== 'system').length > 0 && (
-              <button
-                onClick={handleManualScroll}
-                className="fixed bottom-[calc(4rem+var(--textarea-height,44px))] right-4 p-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-200 backdrop-blur-sm animate-in fade-in-50 slide-in-from-bottom-5"
-                style={{
-                  '--textarea-height': document.querySelector('textarea')?.offsetHeight + 'px'
-                } as React.CSSProperties}
-              >
-                <div className="rounded-full bg-primary/10 p-2">
-                  <svg
-                    className="w-4 h-4 text-primary animate-bounce"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                  </svg>
-                </div>
-              </button>
-            )}
-        </div>
+            {!shouldAutoScroll &&
+              messages.filter((message) => message.role !== "system").length >
+                0 && (
+                <button
+                  onClick={handleManualScroll}
+                  className="fixed bottom-[calc(4rem+var(--textarea-height,44px))] right-4 p-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-200 backdrop-blur-sm animate-in fade-in-50 slide-in-from-bottom-5"
+                  style={
+                    {
+                      "--textarea-height":
+                        document.querySelector("textarea")?.offsetHeight + "px",
+                    } as React.CSSProperties
+                  }
+                >
+                  <div className="rounded-full bg-primary/10 p-2">
+                    <svg
+                      className="w-4 h-4 text-primary animate-bounce"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                    </svg>
+                  </div>
+                </button>
+              )}
+          </div>
 
-        {/* Input Form - Make sticky */}
+          {/* Input Form - Make sticky */}
           <div className="border-t bg-background/50 backdrop-blur-sm p-4 sticky bottom-0 z-30">
-          <form onSubmit={handleSubmit} className="mx-auto max-w-3xl">
+            <form onSubmit={handleSubmit} className="mx-auto max-w-3xl">
               <div className="relative flex items-start">
                 <textarea
-                value={input}
+                  value={input}
                   onChange={(e) => {
                     setInput(e.target.value);
                     // Auto-adjust height
-                    e.target.style.height = 'auto';
-                    e.target.style.height = `${Math.min(e.target.scrollHeight, 200)}px`;
+                    e.target.style.height = "auto";
+                    e.target.style.height = `${Math.min(
+                      e.target.scrollHeight,
+                      200
+                    )}px`;
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
+                    if (e.key === "Enter" && !e.shiftKey) {
                       e.preventDefault();
                       if (input.trim()) {
                         handleSubmit(e);
@@ -979,44 +1035,47 @@ export default function Home() {
                   placeholder={`Message ${selectedPersonality.name}...`}
                   rows={1}
                   className="flex-1 rounded-lg border bg-background px-4 py-3 pr-12 text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:scale-[1.01] hover:border-primary/50 resize-none min-h-[44px] max-h-[200px] overflow-y-auto"
-              />
-              <button
-                type="submit"
+                />
+                <button
+                  type="submit"
                   className="absolute right-3 top-2.5 rounded-md p-1 text-muted-foreground transition-all duration-200 hover:text-foreground hover:scale-110 disabled:opacity-50 disabled:hover:scale-100 group"
-                disabled={!input.trim()}
-              >
-                  <Send size={18} className="transition-transform group-hover:translate-x-1" />
-              </button>
-            </div>
-          </form>
+                  disabled={!input.trim()}
+                >
+                  <Send
+                    size={18}
+                    className="transition-transform group-hover:translate-x-1"
+                  />
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
 
         {/* Search Dialog */}
-      <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
-        <CommandInput placeholder="Search personalities..." />
-        <CommandList>
+        <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
+          <CommandInput placeholder="Search personalities..." />
+          <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup heading="All Personalities">
               {personalities
                 .slice()
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((personality) => (
-              <CommandItem
-                key={personality.id}
-                onSelect={() => {
-                  setSelectedPersonality(personality);
-                  setSearchOpen(false);
-                }}
+                  <CommandItem
+                    key={personality.id}
+                    onSelect={() => {
+                      setSelectedPersonality(personality);
+                      setSearchOpen(false);
+                    }}
                     className="group"
                   >
                     <User className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12" />
                     <span>{personality.name}</span>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      </CommandDialog>
+                  </CommandItem>
+                ))}
+            </CommandGroup>
+          </CommandList>
+        </CommandDialog>
 
         {/* New Chat Dialog */}
         <Dialog open={newChatDialogOpen} onOpenChange={setNewChatDialogOpen}>
@@ -1030,7 +1089,9 @@ export default function Home() {
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-medium">Featured Personalities</h4>
+                  <h4 className="text-sm font-medium">
+                    Featured Personalities
+                  </h4>
                   <button
                     onClick={() => setAllPersonalitiesOpen(true)}
                     className="text-xs text-primary hover:underline"
@@ -1095,7 +1156,10 @@ export default function Home() {
         </Dialog>
 
         {/* All Personalities Dialog */}
-        <Dialog open={allPersonalitiesOpen} onOpenChange={setAllPersonalitiesOpen}>
+        <Dialog
+          open={allPersonalitiesOpen}
+          onOpenChange={setAllPersonalitiesOpen}
+        >
           <DialogContent className="sm:max-w-lg max-h-[80vh]">
             <DialogHeader>
               <DialogTitle>All Personalities</DialogTitle>
@@ -1115,9 +1179,14 @@ export default function Home() {
                 />
               </div>
               <div className="overflow-y-auto max-h-[50vh] space-y-2 pr-2">
-                {ALL_PERSONALITIES.filter(p => 
-                  p.name.toLowerCase().includes(personalitySearch.toLowerCase()) ||
-                  p.description.toLowerCase().includes(personalitySearch.toLowerCase())
+                {ALL_PERSONALITIES.filter(
+                  (p) =>
+                    p.name
+                      .toLowerCase()
+                      .includes(personalitySearch.toLowerCase()) ||
+                    p.description
+                      .toLowerCase()
+                      .includes(personalitySearch.toLowerCase())
                 ).map((personality) => (
                   <button
                     key={personality.id}
@@ -1135,7 +1204,9 @@ export default function Home() {
                     <User size={16} className="shrink-0" />
                     <div className="text-left">
                       <div className="font-medium">{personality.name}</div>
-                      <div className="text-xs text-muted-foreground">{personality.description}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {personality.description}
+                      </div>
                     </div>
                   </button>
                 ))}
@@ -1143,7 +1214,7 @@ export default function Home() {
             </div>
           </DialogContent>
         </Dialog>
-    </div>
+      </div>
     </>
   );
 }
