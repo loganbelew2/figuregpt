@@ -950,13 +950,13 @@ export default function Home() {
                             <MessageSquare size={16} />
                           </div>
                         )}
-                        <div className="flex-1 min-w-0 overflow-x-hidden">
+                        <div className="flex-1 min-w-0 break-words">
                           <div className="mb-1 font-medium truncate">
                             {message.role === "assistant"
                               ? selectedPersonality.name
                               : "You"}
                           </div>
-                          <div className="whitespace-pre-wrap text-muted-foreground break-words overflow-wrap-anywhere">
+                          <div className="whitespace-pre-wrap text-muted-foreground break-words overflow-wrap-anywhere overflow-x-hidden">
                             {message.content}
                           </div>
                         </div>
