@@ -991,10 +991,10 @@ export default function Home() {
                               ? selectedPersonality.name
                               : "You"}
                           </div>
-                          <div className="whitespace-pre-wrap text-muted-foreground break-words overflow-wrap-anywhere overflow-x-hidden text-sm md:text-base max-w-full overflow-hidden">
-                            <span className="break-words whitespace-pre-wrap overflow-wrap-anywhere">
+                          <div className="whitespace-pre-wrap text-muted-foreground break-words overflow-wrap-anywhere overflow-x-hidden text-sm md:text-base max-w-full">
+                            <div className="break-words whitespace-pre-wrap overflow-wrap-anywhere [word-break:break-word] [-webkit-line-break:after-white-space] max-w-full">
                               {message.content}
-                            </span>
+                            </div>
                           </div>
                         </div>
                       </div>

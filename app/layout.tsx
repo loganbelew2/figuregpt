@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Figure Gpt',
   description: 'Chat with AI-powered personalities',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
+  viewport: 'width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1',
   icons: {
     icon: [
       {
@@ -26,10 +26,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-      </head>
-      <body className={inter.className}>
+      <head />
+      <body className={`${inter.className} overscroll-none`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
