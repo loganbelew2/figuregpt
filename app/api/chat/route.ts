@@ -24,9 +24,8 @@ export async function POST(request: Request) {
     const headers = {
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache, no-transform',
+      'Cache-Control': 'no-cache',
       'Connection': 'keep-alive',
-      'X-Accel-Buffering': 'no'
     };
 
     const json = await request.json();
@@ -79,87 +78,44 @@ export async function POST(request: Request) {
       throw new Error('No response body available');
     }
 
-    // Create a transform stream to handle text buffering
-    const textDecoder = new TextDecoder();
-    let buffer = '';
-
-    const transformStream = new TransformStream({
-      transform(chunk, controller) {
-        // Decode the chunk and add to buffer
-        buffer += textDecoder.decode(chunk, { stream: true });
-        
-        // Process complete lines
-        const lines = buffer.split('\n');
-        buffer = lines.pop() || ''; // Keep the last incomplete line in the buffer
-        
-        for (const line of lines) {
-          if (line.trim() === '') continue;
-          if (!line.startsWith('data: ')) continue;
-          
-          const data = line.slice(6);
-          if (data === '[DONE]') {
-            controller.enqueue(new TextEncoder().encode('data: [DONE]\n\n'));
-            continue;
-          }
-          
-          try {
-            const parsed = JSON.parse(data);
-            const content = parsed.choices?.[0]?.delta?.content;
-            if (content) {
-              // Ensure proper handling of special characters and line breaks
-              const formattedContent = content
-                .replace(/\\n/g, '\n')
-                .replace(/\\t/g, '\t')
-                .replace(/\\r/g, '\r')
-                .replace(/\\\\/g, '\\')
-                .replace(/\\'/g, "'")
-                .replace(/\\"/g, '"');
-              
-              controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify({ choices: [{ delta: { content: formattedContent } }] })}\n\n`));
-            }
-          } catch (e) {
-            console.error('Error parsing chunk:', e);
-          }
-        }
-      },
-      flush(controller) {
-        // Process any remaining buffer
-        if (buffer.trim() && buffer.startsWith('data: ')) {
-          try {
-            const data = buffer.slice(6);
-            if (data !== '[DONE]') {
-              const parsed = JSON.parse(data);
-              const content = parsed.choices?.[0]?.delta?.content;
-              if (content) {
-                const formattedContent = content
-                  .replace(/\\n/g, '\n')
-                  .replace(/\\t/g, '\t')
-                  .replace(/\\r/g, '\r')
-                  .replace(/\\\\/g, '\\')
-                  .replace(/\\'/g, "'")
-                  .replace(/\\"/g, '"');
-                
-                controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify({ choices: [{ delta: { content: formattedContent } }] })}\n\n`));
-              }
-            }
-          } catch (e) {
-            console.error('Error parsing final buffer:', e);
-          }
-        }
-        controller.enqueue(new TextEncoder().encode('data: [DONE]\n\n'));
-      }
-    });
-
     // Handle client disconnect
     request.signal.addEventListener('abort', () => {
       controller.abort();
       console.log('Client disconnected, aborting stream');
     });
 
-    // Pipe the response through the transform stream
-    const stream = deepseekResponse.body
-      .pipeThrough(new TextDecoderStream())
-      .pipeThrough(transformStream);
+    // Create readable stream from the response
+    const stream = new ReadableStream({
+      async start(controller) {
+        const reader = deepseekResponse.body!.getReader();
+        
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            
+            if (done) {
+              controller.close();
+              break;
+            }
+            
+            controller.enqueue(value);
+          }
+        } catch (error: any) {
+          if (error?.name === 'AbortError') {
+            console.log('Stream aborted');
+            controller.close();
+          } else {
+            console.error('Stream error:', error);
+            controller.error(error);
+          }
+        } finally {
+          reader.releaseLock();
+        }
+      },
+      cancel() {
+        controller.abort();
+      },
+    });
 
     return new NextResponse(stream, { headers });
   } catch (error) {

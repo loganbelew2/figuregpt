@@ -206,9 +206,6 @@
     overflow-wrap: break-word;
     word-wrap: break-word;
     -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
   
   a, button, input, [role="button"], textarea {
@@ -241,8 +238,6 @@
     max-width: 100% !important;
     overflow-x: hidden !important;
     text-overflow: ellipsis !important;
-    -webkit-line-break: after-white-space !important;
-    line-break: after-white-space !important;
   }
 
   /* Force word breaks on long strings */
@@ -255,8 +250,6 @@
     max-width: 100% !important;
     overflow-x: hidden !important;
     text-overflow: ellipsis !important;
-    -webkit-line-break: after-white-space !important;
-    line-break: after-white-space !important;
   }
 
   /* Ensure all text containers handle overflow properly */
@@ -267,16 +260,14 @@
     max-width: 100% !important;
     overflow-x: hidden !important;
     text-overflow: ellipsis !important;
-    -webkit-line-break: after-white-space !important;
-    line-break: after-white-space !important;
   }
 
   /* Additional mobile text handling */
   .overflow-wrap-anywhere {
     overflow-wrap: anywhere !important;
     word-break: break-word !important;
-    -webkit-line-break: after-white-space !important;
-    line-break: after-white-space !important;
+    -webkit-line-break: anywhere !important;
+    line-break: anywhere !important;
     hyphens: auto !important;
     text-overflow: ellipsis !important;
   }
@@ -288,9 +279,6 @@
     word-wrap: break-word !important;
     word-break: break-word !important;
     -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-    -webkit-line-break: after-white-space !important;
-    line-break: after-white-space !important;
   }
 }
 
